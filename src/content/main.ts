@@ -102,18 +102,9 @@ async function fastMerge() {
     return
   }
 
-  // Step 2: Tick the bypass rules checkbox
-  let checkbox: HTMLInputElement
-  try {
-    checkbox = await waitForElement<HTMLInputElement>(
-      '[data-testid="mergebox-partial"] input[type="checkbox"]',
-      { timeout: 2000 }
-    )
-  } catch {
-    showToast('Could not find the bypass rules checkbox.')
-    return
-  }
-  if (!checkbox.checked) {
+  // Step 2: Tick the bypass rules checkbox (optional — may not exist on all PRs)
+  const checkbox = mergebox.querySelector<HTMLInputElement>('input[type="checkbox"]')
+  if (checkbox && !checkbox.checked) {
     checkbox.click()
   }
 
@@ -188,8 +179,8 @@ async function fastMerge() {
 document.addEventListener('keydown', (e: KeyboardEvent) => {
   const isMac = navigator.platform.includes('Mac')
   const trigger = isMac
-    ? e.metaKey && e.shiftKey && e.key === 'M'
-    : e.ctrlKey && e.shiftKey && e.key === 'M'
+    ? e.metaKey && e.shiftKey && e.code === 'KeyM'
+    : e.ctrlKey && e.shiftKey && e.code === 'KeyM'
 
   if (!trigger) return
 
