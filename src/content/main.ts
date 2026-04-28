@@ -190,13 +190,11 @@ chrome.storage.onChanged.addListener((changes, area) => {
 
 document.addEventListener('keydown', (e: KeyboardEvent) => {
   const s = activeShortcut
-  if (
-    e.code !== s.code ||
-    e.ctrlKey !== s.ctrlKey ||
-    e.metaKey !== s.metaKey ||
-    e.shiftKey !== s.shiftKey ||
-    e.altKey !== s.altKey
-  ) return
+  if (e.code !== s.code) return
+  if (s.ctrlKey && !e.ctrlKey) return
+  if (s.metaKey && !e.metaKey) return
+  if (s.shiftKey && !e.shiftKey) return
+  if (s.altKey && !e.altKey) return
 
   const active = document.activeElement
   if (
