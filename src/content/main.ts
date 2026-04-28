@@ -176,13 +176,27 @@ async function fastMerge() {
 
 // ─── Keyboard Listener ────────────────────────────────────────────────────────
 
-document.addEventListener('keydown', (e: KeyboardEvent) => {
-  const isMac = navigator.platform.includes('Mac')
-  const trigger = isMac
-    ? e.metaKey && e.shiftKey && e.code === 'KeyM'
-    : e.ctrlKey && e.shiftKey && e.code === 'KeyM'
+import { type Shortcut, defaultShortcut, loadShortcut } from '../shortcut'
 
-  if (!trigger) return
+let activeShortcut: Shortcut = defaultShortcut()
+
+loadShortcut().then(s => { activeShortcut = s })
+
+chrome.storage.onChanged.addListener((changes, area) => {
+  if (area === 'sync' && changes.shortcut) {
+    activeShortcut = changes.shortcut.newValue as Shortcut
+  }
+})
+
+document.addEventListener('keydown', (e: KeyboardEvent) => {
+  const s = activeShortcut
+  if (
+    e.code !== s.code ||
+    e.ctrlKey !== s.ctrlKey ||
+    e.metaKey !== s.metaKey ||
+    e.shiftKey !== s.shiftKey ||
+    e.altKey !== s.altKey
+  ) return
 
   const active = document.activeElement
   if (
