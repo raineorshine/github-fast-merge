@@ -1,3 +1,6 @@
+// ─── Keyboard Listener ────────────────────────────────────────────────────────
+import { type Shortcut, defaultShortcut, loadShortcut } from '../shortcut'
+
 // ─── Utilities ───────────────────────────────────────────────────────────────
 
 function showToast(message: string, type: 'success' | 'error' = 'error') {
@@ -21,12 +24,10 @@ function showToast(message: string, type: 'success' | 'error' = 'error') {
     boxShadow: '0 8px 24px rgba(140,149,159,0.2)',
     border: '1px solid',
     color: type === 'error' ? 'var(--fgColor-onEmphasis, #ffffff)' : 'var(--fgColor-onEmphasis, #ffffff)',
-    backgroundColor: type === 'error'
-      ? 'var(--bgColor-danger-emphasis, #cf222e)'
-      : 'var(--bgColor-success-emphasis, #1a7f37)',
-    borderColor: type === 'error'
-      ? 'var(--borderColor-danger-emphasis, #a40e26)'
-      : 'var(--borderColor-success-emphasis, #1a7f37)',
+    backgroundColor:
+      type === 'error' ? 'var(--bgColor-danger-emphasis, #cf222e)' : 'var(--bgColor-success-emphasis, #1a7f37)',
+    borderColor:
+      type === 'error' ? 'var(--borderColor-danger-emphasis, #a40e26)' : 'var(--borderColor-success-emphasis, #1a7f37)',
     transition: 'opacity 0.3s',
   })
   document.body.appendChild(toast)
@@ -42,7 +43,7 @@ function waitForElement<T extends Element>(
     timeout?: number
     root?: Element | Document
     filter?: (el: T) => boolean
-  } = {}
+  } = {},
 ): Promise<T> {
   const { timeout = 5000, root = document, filter } = options
 
@@ -111,15 +112,10 @@ async function fastMerge() {
   // Step 3: Click the merge button (enabled after bypass checkbox is ticked)
   let mergeButton: HTMLButtonElement
   try {
-    mergeButton = await waitForElement<HTMLButtonElement>(
-      '[data-testid="mergebox-partial"] button.flex-1',
-      {
-        timeout: 5000,
-        filter: btn =>
-          btn.getAttribute('aria-disabled') !== 'true' &&
-          btn.getAttribute('data-inactive') !== 'true',
-      }
-    )
+    mergeButton = await waitForElement<HTMLButtonElement>('[data-testid="mergebox-partial"] button.flex-1', {
+      timeout: 5000,
+      filter: btn => btn.getAttribute('aria-disabled') !== 'true' && btn.getAttribute('data-inactive') !== 'true',
+    })
   } catch {
     showToast('Merge button did not become enabled within 5 seconds.')
     return
@@ -129,17 +125,13 @@ async function fastMerge() {
   // Step 4: Click the confirm merge button
   let confirmButton: HTMLButtonElement | null = null
   try {
-    confirmButton = await waitForElement<HTMLButtonElement>(
-      '[data-testid="mergebox-partial"] button',
-      {
-        timeout: 5000,
-        filter: btn => {
-          const text = btn.textContent?.toLowerCase() ?? ''
-          return text.includes('confirm') && !btn.hidden &&
-            btn.getAttribute('aria-disabled') !== 'true'
-        },
-      }
-    )
+    confirmButton = await waitForElement<HTMLButtonElement>('[data-testid="mergebox-partial"] button', {
+      timeout: 5000,
+      filter: btn => {
+        const text = btn.textContent?.toLowerCase() ?? ''
+        return text.includes('confirm') && !btn.hidden && btn.getAttribute('aria-disabled') !== 'true'
+      },
+    })
   } catch {
     showToast('Confirm merge button did not appear within 5 seconds.')
     return
@@ -148,13 +140,10 @@ async function fastMerge() {
 
   // Step 5: Wait for "Pull request successfully merged and closed"
   try {
-    await waitForElement<HTMLHeadingElement>(
-      '[data-testid="mergebox-border-container"] h3',
-      {
-        timeout: 5000,
-        filter: h3 => (h3.textContent ?? '').toLowerCase().includes('successfully merged'),
-      }
-    )
+    await waitForElement<HTMLHeadingElement>('[data-testid="mergebox-border-container"] h3', {
+      timeout: 5000,
+      filter: h3 => (h3.textContent ?? '').toLowerCase().includes('successfully merged'),
+    })
   } catch {
     showToast('Timed out waiting for merge confirmation after 5 seconds.')
     return
@@ -164,23 +153,20 @@ async function fastMerge() {
 
   // Step 6: Click the "Done" notification button
   try {
-    const doneButton = await waitForElement<HTMLButtonElement>(
-      'button[aria-label="Done"][data-hotkey="e"]',
-      { timeout: 5000 }
-    )
+    const doneButton = await waitForElement<HTMLButtonElement>('button[aria-label="Done"][data-hotkey="e"]', {
+      timeout: 5000,
+    })
     doneButton.click()
   } catch {
     // Done button missing is non-fatal — merge already succeeded
   }
 }
 
-// ─── Keyboard Listener ────────────────────────────────────────────────────────
-
-import { type Shortcut, defaultShortcut, loadShortcut } from '../shortcut'
-
 let activeShortcut: Shortcut = defaultShortcut()
 
-loadShortcut().then(s => { activeShortcut = s })
+loadShortcut().then(s => {
+  activeShortcut = s
+})
 
 chrome.storage.onChanged.addListener((changes, area) => {
   if (area === 'sync' && changes.shortcut) {

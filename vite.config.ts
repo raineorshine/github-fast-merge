@@ -1,5 +1,5 @@
-import path from 'node:path'
 import { crx } from '@crxjs/vite-plugin'
+import path from 'node:path'
 import { defineConfig } from 'vite'
 import zip from 'vite-plugin-zip-pack'
 import manifest from './manifest.config.js'
@@ -11,15 +11,10 @@ export default defineConfig({
       '@': `${path.resolve(__dirname, 'src')}`,
     },
   },
-  plugins: [
-    crx({ manifest }),
-    zip({ outDir: 'release', outFileName: `crx-${name}-${version}.zip` }),
-  ],
+  plugins: [crx({ manifest }), zip({ outDir: 'release', outFileName: `crx-${name}-${version}.zip` })],
   server: {
     cors: {
-      origin: [
-        /chrome-extension:\/\//,
-      ],
+      origin: [/chrome-extension:\/\//],
     },
   },
 })

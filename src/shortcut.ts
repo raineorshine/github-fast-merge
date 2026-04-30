@@ -59,10 +59,20 @@ function keyLabel(code: string): string {
   if (code.startsWith('Key')) return code.slice(3).toUpperCase()
   if (code.startsWith('Digit')) return code.slice(5)
   const map: Record<string, string> = {
-    Space: 'Space', Enter: '↵', Backspace: '⌫', Tab: '⇥',
-    ArrowUp: '↑', ArrowDown: '↓', ArrowLeft: '←', ArrowRight: '→',
-    Escape: 'Esc', Delete: 'Del', Home: 'Home', End: 'End',
-    PageUp: 'PgUp', PageDown: 'PgDn',
+    Space: 'Space',
+    Enter: '↵',
+    Backspace: '⌫',
+    Tab: '⇥',
+    ArrowUp: '↑',
+    ArrowDown: '↓',
+    ArrowLeft: '←',
+    ArrowRight: '→',
+    Escape: 'Esc',
+    Delete: 'Del',
+    Home: 'Home',
+    End: 'End',
+    PageUp: 'PgUp',
+    PageDown: 'PgDn',
   }
   return map[code] ?? code
 }

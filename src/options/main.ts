@@ -39,7 +39,10 @@ function renderShortcut(s: Shortcut, el: HTMLElement) {
 function setStatus(msg: string, isError = false) {
   statusEl.textContent = msg
   statusEl.className = 'status' + (isError ? ' error' : '')
-  if (msg) setTimeout(() => { statusEl.textContent = '' }, 3000)
+  if (msg)
+    setTimeout(() => {
+      statusEl.textContent = ''
+    }, 3000)
 }
 
 function startRecording() {

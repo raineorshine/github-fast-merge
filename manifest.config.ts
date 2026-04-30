@@ -13,8 +13,10 @@ export default defineManifest({
     open_in_tab: true,
   },
   permissions: ['storage'],
-  content_scripts: [{
-    js: ['src/content/main.ts'],
-    matches: ['https://github.com/*/pull/*'],
-  }],
+  content_scripts: [
+    {
+      js: ['src/content/main.ts'],
+      matches: ['https://github.com/*/pull/*'],
+    },
+  ],
 })
