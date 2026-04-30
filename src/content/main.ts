@@ -12,8 +12,9 @@ function showToast(message: string, type: 'success' | 'error' = 'error') {
   toast.textContent = message
   Object.assign(toast.style, {
     position: 'fixed',
-    bottom: '24px',
-    right: '24px',
+    top: '24px',
+    left: '50%',
+    transform: 'translateX(-50%)',
     zIndex: '99999',
     padding: '12px 16px',
     borderRadius: '6px',
