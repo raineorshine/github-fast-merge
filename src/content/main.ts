@@ -110,12 +110,19 @@ async function fastMerge() {
     checkbox.click()
   }
 
-  // Step 3: Click the merge button (enabled after bypass checkbox is ticked)
+  // Step 3: Click the merge button (enabled after bypass checkbox is ticked).
+  // Match by label so we don't accidentally hit the "Update branch" button,
+  // which is also a `.flex-1` button and is enabled while the merge button is
+  // still disabled when the branch is out-of-date with the base branch.
   let mergeButton: HTMLButtonElement
   try {
     mergeButton = await waitForElement<HTMLButtonElement>('[data-testid="mergebox-partial"] button.flex-1', {
       timeout: 5000,
-      filter: btn => btn.getAttribute('aria-disabled') !== 'true' && btn.getAttribute('data-inactive') !== 'true',
+      filter: btn => {
+        if (btn.getAttribute('aria-disabled') === 'true' || btn.getAttribute('data-inactive') === 'true') return false
+        const text = btn.textContent?.toLowerCase() ?? ''
+        return text.includes('merge') && !text.includes('update')
+      },
     })
   } catch {
     showToast('Merge button did not become enabled within 5 seconds.')
