@@ -1,6 +1,6 @@
 {
   "name": "github-fast-merge",
-  "description": "A Chrome extension that adds a 'Fast Merge' button to GitHub pull requests, allowing users to merge PRs with a single click.",
+  "description": "A Chrome extension that merges GitHub PRs with a single keyboard shortcut.",
   "type": "module",
   "version": "1.0.0",
   "scripts": {
